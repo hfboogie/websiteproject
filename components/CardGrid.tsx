@@ -1,3 +1,5 @@
+"use client";
+
 import { Card } from '@/lib/api/scryfall';
 
 interface CardGridProps {
