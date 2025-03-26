@@ -1,12 +1,14 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Card } from '@/lib/api/scryfall';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DeckBuilderSidebar from './DeckBuilderSidebar';
 import DeckBuilderMain from './DeckBuilderMain';
 import AutocompleteInput from './AutocompleteInput';
+import DeckEvaluation from './DeckEvaluation';
+import AIAnalysis from './AIAnalysis';
 import { getCardByExactName, getCardByFuzzyName } from '@/lib/api/scryfall';
 
 export interface DeckCard extends Card {
@@ -41,6 +43,7 @@ export default function DeckBuilder() {
   });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [quickAddError, setQuickAddError] = useState<string | null>(null);
+  const [activeTab, setActiveTab] = useState<'builder' | 'evaluation' | 'ai'>('builder');
 
   const addCardToDeck = (card: Card) => {
     setDeck(prevDeck => {
@@ -244,30 +247,81 @@ export default function DeckBuilder() {
         </div>
       </div>
       
-      <div className="flex flex-col lg:flex-row gap-6 w-full">
-        <div className="lg:w-1/3 xl:w-1/4">
-          <DeckBuilderSidebar 
-            deck={deck}
-            updateDeckInfo={updateDeckInfo}
-            addCategory={addCategory}
-            removeCategory={removeCategory}
-            activeCategory={activeCategory}
-            setActiveCategory={setActiveCategory}
-            saveDeck={saveDeck}
-          />
-        </div>
-        <div className="lg:w-2/3 xl:w-3/4">
-          <DeckBuilderMain 
-            deck={deck}
-            searchResults={searchResults}
-            setSearchResults={setSearchResults}
-            addCardToDeck={addCardToDeck}
-            removeCardFromDeck={removeCardFromDeck}
-            moveCardToCategory={moveCardToCategory}
-            activeCategory={activeCategory}
-          />
+      <div className="mb-6">
+        <div className="border-b border-gray-200">
+          <nav className="-mb-px flex space-x-8">
+            <button
+              onClick={() => setActiveTab('builder')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'builder'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Deck Builder
+            </button>
+            <button
+              onClick={() => setActiveTab('evaluation')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'evaluation'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Deck Evaluation
+            </button>
+            <button
+              onClick={() => setActiveTab('ai')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'ai'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              AI Analysis
+            </button>
+          </nav>
         </div>
       </div>
+      
+      {activeTab === 'builder' && (
+        <div className="flex flex-col lg:flex-row gap-6 w-full">
+          <div className="lg:w-1/3 xl:w-1/4">
+            <DeckBuilderSidebar 
+              deck={deck}
+              updateDeckInfo={updateDeckInfo}
+              addCategory={addCategory}
+              removeCategory={removeCategory}
+              activeCategory={activeCategory}
+              setActiveCategory={setActiveCategory}
+              saveDeck={saveDeck}
+            />
+          </div>
+          <div className="lg:w-2/3 xl:w-3/4">
+            <DeckBuilderMain 
+              deck={deck}
+              searchResults={searchResults}
+              setSearchResults={setSearchResults}
+              addCardToDeck={addCardToDeck}
+              removeCardFromDeck={removeCardFromDeck}
+              moveCardToCategory={moveCardToCategory}
+              activeCategory={activeCategory}
+            />
+          </div>
+        </div>
+      )}
+      
+      {activeTab === 'evaluation' && (
+        <DeckEvaluation cards={deck.cards} />
+      )}
+      
+      {activeTab === 'ai' && (
+        <AIAnalysis 
+          cards={deck.cards} 
+          format={deck.format} 
+          deckName={deck.name} 
+        />
+      )}
     </DndProvider>
   );
 }
