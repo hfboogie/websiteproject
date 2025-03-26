@@ -6,10 +6,10 @@
 - [x] Create README.md
 - [x] Set up .gitignore
 - [x] Configure environment variables
-- [ ] Create initial commit
-- [ ] Set up Next.js with TypeScript
-- [ ] Install and configure Tailwind CSS
-- [ ] Set up project folder structure
+- [x] Create initial commit
+- [x] Set up Next.js with TypeScript
+- [x] Install and configure Tailwind CSS
+- [x] Set up project folder structure
 
 ## Scryfall API Integration
 - [ ] Research Scryfall API documentation

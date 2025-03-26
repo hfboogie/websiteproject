@@ -1,0 +1,67 @@
+{
+  "completed": "2025-03-26T06:46:50.732695Z",
+  "periodic": true,
+  "started": "2025-03-26T06:44:47.019635Z",
+  "versions": [
+    {
+      "filename": "setuptools-78.1.0-py3-none-any.whl",
+      "found_date": "2025-03-26T06:44:50.093929Z",
+      "release_date": "2025-03-25T22:49:33.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-78.0.2-py3-none-any.whl",
+      "found_date": "2025-03-26T06:45:17.978807Z",
+      "release_date": "2025-03-24T19:50:39.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-78.0.1-py3-none-any.whl",
+      "found_date": "2025-03-26T06:45:31.618714Z",
+      "release_date": "2025-03-24T14:39:50.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-77.0.3-py3-none-any.whl",
+      "found_date": "2025-03-26T06:45:45.476261Z",
+      "release_date": "2025-03-20T14:38:06.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-77.0.1-py3-none-any.whl",
+      "found_date": "2025-03-26T06:45:56.856347Z",
+      "release_date": "2025-03-19T19:52:01.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-76.1.0-py3-none-any.whl",
+      "found_date": "2025-03-26T06:46:06.605407Z",
+      "release_date": "2025-03-18T01:41:49.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-76.0.0-py3-none-any.whl",
+      "found_date": "2025-03-26T06:46:15.463595Z",
+      "release_date": "2025-03-09T13:59:48.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-75.9.1-py3-none-any.whl",
+      "found_date": "2025-03-26T06:46:23.918811Z",
+      "release_date": "2025-03-09T03:18:42.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-75.8.2-py3-none-any.whl",
+      "found_date": "2025-03-26T06:46:32.566504Z",
+      "release_date": "2025-02-26T20:45:17.000000Z",
+      "source": "periodic"
+    },
+    {
+      "filename": "setuptools-75.8.1-py3-none-any.whl",
+      "found_date": "2025-03-26T06:46:41.748110Z",
+      "release_date": "2025-02-25T14:47:53.000000Z",
+      "source": "periodic"
+    }
+  ]
+}
