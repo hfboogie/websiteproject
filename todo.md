@@ -26,11 +26,11 @@
 - [x] Test with various search queries
 
 ## Card Display and Filtering
-- [ ] Create card component
-- [ ] Implement card grid/list views
-- [ ] Add sorting functionality
-- [ ] Add filtering options
-- [ ] Implement pagination
+- [x] Create card component
+- [x] Implement card grid/list views
+- [x] Add sorting functionality
+- [x] Add filtering options
+- [x] Implement pagination
 
 ## Deck Building
 - [ ] Create deck builder interface
