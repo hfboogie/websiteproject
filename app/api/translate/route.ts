@@ -24,28 +24,28 @@ export async function POST(request: Request) {
           role: "system",
           content: `You are an expert Magic: The Gathering card database specialist that translates natural language queries into precise Scryfall syntax.
 
-Your task is to convert natural language queries about Magic cards into Scryfall's advanced search syntax, ensuring comprehensive results.
+Your task is to convert natural language queries about Magic cards into Scryfall's advanced search syntax, ensuring comprehensive but accurate results.
 
 Important guidelines:
-- Be thorough and inclusive in your translations to capture all relevant cards
-- When users mention card destruction effects, include all variations (destroy, sacrifice, exile, etc.)
-- For land destruction, include mass land destruction and targeted land destruction
+- Be thorough but precise in your translations to capture relevant cards while excluding false positives
+- When users mention card destruction effects, be specific about the target (creatures, lands, etc.)
+- For land destruction, use specific terms like "o:destroy AND o:land" or "o:\"sacrifice a land\"" 
 - Always ensure parentheses are properly closed and balanced
-- Use OR operators liberally to include all possible variations of effects
-- Consider synonyms and related terms in your translations
+- Use AND operators to ensure precision when needed (e.g., "o:destroy AND o:land" not just "o:destroy o:land")
 - For specific card names, use the exact name format: !"Card Name"
+- Avoid overly broad terms that might include irrelevant cards
 
 Examples:
 - "Show me red dragons with flying" -> "t:dragon c:r o:flying"
-- "Find counterspells in blue" -> "o:/counter.*spell/ c:u OR o:/counter target.*spell/ c:u"
+- "Find counterspells in blue" -> "o:/counter target.*spell/ c:u"
 - "Cards that cost less than 3 mana and draw cards" -> "cmc<3 (o:\"draw a card\" OR o:\"draw cards\")"
 - "Legendary creatures in Kamigawa" -> "t:legendary t:creature (s:kamigawa OR s:/kamigawa.*champions/ OR s:/kamigawa.*neon/)"
 - "Black removal spells" -> "c:b (o:destroy OR o:exile OR o:\"sacrifice a creature\" OR o:\"gets -X/-X\")"
-- "White cards that destroy land" -> "c:w (o:destroy AND o:land OR o:\"sacrifice a land\" OR o:\"sacrifice all lands\" OR o:\"destroy all lands\")"
+- "White cards that destroy land" -> "c:w (o:\"destroy target land\" OR o:\"destroy all lands\" OR o:armageddon)"
 - "Planeswalkers with loyalty abilities that deal damage" -> "t:planeswalker o:loyalty o:damage"
 - "atraxa" -> "!\"Atraxa, Praetors' Voice\" OR !\"Atraxa, Grand Unifier\""
 
-Only respond with the Scryfall syntax, nothing else. Make your translations as comprehensive as possible to ensure all relevant cards are captured. Always double-check that all parentheses are properly closed.`
+Only respond with the Scryfall syntax, nothing else. Make your translations precise to ensure only relevant cards are captured. Always double-check that all parentheses are properly closed.`
         },
         {
           role: "user",

@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '@/lib/api/scryfall';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 import DeckBuilderSidebar from './DeckBuilderSidebar';
 import DeckBuilderMain from './DeckBuilderMain';
+import AutocompleteInput from './AutocompleteInput';
+import { getCardByExactName, getCardByFuzzyName } from '@/lib/api/scryfall';
 
 export interface DeckCard extends Card {
   count: number;
@@ -38,6 +40,7 @@ export default function DeckBuilder() {
     updatedAt: new Date(),
   });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const [quickAddError, setQuickAddError] = useState<string | null>(null);
 
   const addCardToDeck = (card: Card) => {
     setDeck(prevDeck => {
@@ -68,6 +71,30 @@ export default function DeckBuilder() {
         };
       }
     });
+  };
+
+  const handleQuickAddCard = async (cardName: string) => {
+    setQuickAddError(null);
+    try {
+      // First try exact match
+      try {
+        const card = await getCardByExactName(cardName);
+        addCardToDeck(card);
+        return;
+      } catch (error) {
+        // If exact match fails, try fuzzy match
+        try {
+          const card = await getCardByFuzzyName(cardName);
+          addCardToDeck(card);
+          return;
+        } catch (fuzzyError) {
+          throw new Error(`Card not found: ${cardName}`);
+        }
+      }
+    } catch (error) {
+      console.error('Error adding card:', error);
+      setQuickAddError(error instanceof Error ? error.message : 'Failed to add card');
+    }
   };
 
   const removeCardFromDeck = (cardId: string) => {
@@ -198,6 +225,25 @@ export default function DeckBuilder() {
 
   return (
     <DndProvider backend={HTML5Backend}>
+      <div className="mb-6">
+        <div className="bg-white rounded-lg shadow-md p-4">
+          <h2 className="text-xl font-bold mb-4">Quick Add Card</h2>
+          <div className="flex flex-col md:flex-row gap-2">
+            <div className="flex-grow">
+              <AutocompleteInput 
+                onCardSelected={handleQuickAddCard}
+                placeholder="Type a card name to add to your deck..."
+              />
+            </div>
+          </div>
+          {quickAddError && (
+            <div className="mt-2 text-red-600 text-sm">
+              {quickAddError}
+            </div>
+          )}
+        </div>
+      </div>
+      
       <div className="flex flex-col lg:flex-row gap-6 w-full">
         <div className="lg:w-1/3 xl:w-1/4">
           <DeckBuilderSidebar 
