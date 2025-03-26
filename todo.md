@@ -12,18 +12,18 @@
 - [x] Set up project folder structure
 
 ## Scryfall API Integration
-- [ ] Research Scryfall API documentation
-- [ ] Create API client for Scryfall
-- [ ] Implement card search functionality
-- [ ] Implement card data fetching
-- [ ] Add error handling for API requests
+- [x] Research Scryfall API documentation
+- [x] Create API client for Scryfall
+- [x] Implement card search functionality
+- [x] Implement card data fetching
+- [x] Add error handling for API requests
 
 ## Natural Language Search
-- [ ] Set up OpenAI API integration
-- [ ] Create translation service for natural language to Scryfall syntax
-- [ ] Implement search interface component
-- [ ] Add loading states and error handling
-- [ ] Test with various search queries
+- [x] Set up OpenAI API integration
+- [x] Create translation service for natural language to Scryfall syntax
+- [x] Implement search interface component
+- [x] Add loading states and error handling
+- [x] Test with various search queries
 
 ## Card Display and Filtering
 - [ ] Create card component
