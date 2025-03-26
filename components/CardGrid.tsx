@@ -1,85 +1,79 @@
 "use client";
 
+import React from 'react';
 import { Card } from '@/lib/api/scryfall';
+import { DeckCard } from './DeckBuilder';
+import DeckAffiliateLinks from './DeckAffiliateLinks';
 
 interface CardGridProps {
   cards: Card[];
-  isLoading: boolean;
+  onAddToDeck?: (card: Card) => void;
+  className?: string;
 }
 
-export default function CardGrid({ cards, isLoading }: CardGridProps) {
-  if (isLoading) {
-    return (
-      <div className="flex justify-center my-8">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
-
-  if (!cards || cards.length === 0) {
-    return (
-      <div className="p-4 my-4 text-amber-700 bg-amber-100 rounded-lg">
-        <p>No cards found matching your search criteria.</p>
-      </div>
-    );
-  }
-
+export default function CardGrid({ cards, onAddToDeck, className = "" }: CardGridProps) {
   return (
-    <div className="mt-6">
-      <h2 className="text-xl font-bold mb-4">Search Results ({cards.length} cards)</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-        {cards.map((card) => (
-          <div key={card.id} className="border rounded-lg overflow-hidden hover:shadow-lg transition-shadow">
-            {card.image_uris?.normal ? (
-              <img 
-                src={card.image_uris.normal} 
-                alt={card.name} 
-                className="w-full h-auto"
-              />
-            ) : card.card_faces && card.card_faces[0].image_uris?.normal ? (
-              <img 
-                src={card.card_faces[0].image_uris.normal} 
-                alt={card.name} 
-                className="w-full h-auto"
-              />
-            ) : (
-              <div className="h-40 bg-gray-200 flex items-center justify-center">
-                <p className="text-gray-500">No image available</p>
-              </div>
+    <div className={`grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 ${className}`}>
+      {cards.map(card => (
+        <div key={card.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+          {/* Card Image */}
+          <div className="relative">
+            <img 
+              src={card.image_uris?.normal || card.image_uris?.png || card.image_uris?.large || '/card-back.png'} 
+              alt={card.name}
+              className="w-full h-auto"
+            />
+            {onAddToDeck && (
+              <button
+                onClick={() => onAddToDeck(card)}
+                className="absolute top-2 right-2 bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center hover:bg-blue-700 transition"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
+                </svg>
+              </button>
             )}
-            <div className="p-3">
-              <h3 className="font-bold text-lg">{card.name}</h3>
-              <p className="text-sm text-gray-600">{card.type_line}</p>
-              <div className="flex justify-between items-center mt-2">
-                <p className="text-sm text-gray-600">{card.set_name} ({card.set.toUpperCase()})</p>
-                {card.prices?.usd && (
-                  <p className="text-sm font-medium">${card.prices.usd}</p>
-                )}
+          </div>
+          
+          {/* Card Info */}
+          <div className="p-3">
+            <h3 className="text-md font-semibold mb-1 truncate">{card.name}</h3>
+            <p className="text-xs text-gray-600 mb-2 truncate">{card.type_line}</p>
+            
+            {/* Price Info (placeholder) */}
+            <div className="flex justify-between items-center mb-3">
+              <div>
+                <p className="text-xs text-gray-500">Market</p>
+                <p className="text-sm font-semibold">${(card.prices?.usd || '0.00')}</p>
               </div>
-              <div className="mt-3 flex justify-between">
-                <a 
-                  href={card.scryfall_uri} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="text-xs text-blue-600 hover:text-blue-800"
-                >
-                  View on Scryfall
-                </a>
-                {card.purchase_uris?.tcgplayer && (
-                  <a 
-                    href={card.purchase_uris.tcgplayer} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-xs text-green-600 hover:text-green-800"
-                  >
-                    Buy on TCGPlayer
-                  </a>
-                )}
+              <div>
+                <p className="text-xs text-gray-500">Foil</p>
+                <p className="text-sm font-semibold">${(card.prices?.usd_foil || '0.00')}</p>
               </div>
             </div>
+            
+            {/* Affiliate Links */}
+            <div className="flex space-x-2">
+              <a 
+                href={`https://www.tcgplayer.com/search/magic/product?productLineName=magic&q=${encodeURIComponent(card.name)}&utm_campaign=affiliate&utm_medium=api&utm_source=YOUR_TCGPLAYER_AFFILIATE_ID`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 px-2 py-1 bg-blue-600 text-white text-xs text-center rounded hover:bg-blue-700 transition"
+              >
+                TCGPlayer
+              </a>
+              <a 
+                href={`https://www.cardkingdom.com/catalog/search?search=header&filter%5Bname%5D=${encodeURIComponent(card.name)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex-1 px-2 py-1 bg-green-600 text-white text-xs text-center rounded hover:bg-green-700 transition"
+              >
+                Card Kingdom
+              </a>
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 }

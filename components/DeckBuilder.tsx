@@ -9,6 +9,7 @@ import DeckBuilderMain from './DeckBuilderMain';
 import AutocompleteInput from './AutocompleteInput';
 import DeckEvaluation from './DeckEvaluation';
 import AIAnalysis from './AIAnalysis';
+import DeckAffiliateLinks from './DeckAffiliateLinks';
 import { getCardByExactName, getCardByFuzzyName } from '@/lib/api/scryfall';
 
 export interface DeckCard extends Card {
@@ -43,7 +44,7 @@ export default function DeckBuilder() {
   });
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [quickAddError, setQuickAddError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'builder' | 'evaluation' | 'ai'>('builder');
+  const [activeTab, setActiveTab] = useState<'builder' | 'evaluation' | 'ai' | 'purchase'>('builder');
 
   const addCardToDeck = (card: Card) => {
     setDeck(prevDeck => {
@@ -280,6 +281,16 @@ export default function DeckBuilder() {
             >
               AI Analysis
             </button>
+            <button
+              onClick={() => setActiveTab('purchase')}
+              className={`py-4 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'purchase'
+                  ? 'border-blue-500 text-blue-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              Purchase Deck
+            </button>
           </nav>
         </div>
       </div>
@@ -322,6 +333,21 @@ export default function DeckBuilder() {
           deckName={deck.name} 
         />
       )}
+      
+      {activeTab === 'purchase' && (
+        <DeckAffiliateLinks 
+          cards={deck.cards} 
+          deckName={deck.name} 
+        />
+      )}
+      
+      {/* Ad Space */}
+      <div className="mt-8 p-4 bg-gray-100 rounded-lg text-center">
+        <p className="text-gray-500 text-sm mb-2">Advertisement</p>
+        <div className="bg-gray-200 h-24 flex items-center justify-center">
+          <p className="text-gray-400">Ad Space - 728x90</p>
+        </div>
+      </div>
     </DndProvider>
   );
 }
