@@ -10,6 +10,46 @@
 const SCRYFALL_API_BASE_URL = 'https://api.scryfall.com';
 
 /**
+ * Ensures parentheses are balanced in a query string
+ * 
+ * @param query - The query string to check and fix
+ * @returns The query with balanced parentheses
+ */
+function ensureBalancedParentheses(query: string): string {
+  let openCount = 0;
+  let closeCount = 0;
+  
+  // Count open and close parentheses
+  for (let i = 0; i < query.length; i++) {
+    if (query[i] === '(') openCount++;
+    if (query[i] === ')') closeCount++;
+  }
+  
+  // Add missing closing parentheses
+  if (openCount > closeCount) {
+    return query + ')'.repeat(openCount - closeCount);
+  }
+  
+  // Remove extra closing parentheses
+  if (closeCount > openCount) {
+    let result = '';
+    let skipCount = closeCount - openCount;
+    
+    for (let i = 0; i < query.length; i++) {
+      if (query[i] === ')' && skipCount > 0) {
+        skipCount--;
+        continue;
+      }
+      result += query[i];
+    }
+    
+    return result;
+  }
+  
+  return query;
+}
+
+/**
  * Search for cards using Scryfall's search syntax
  * 
  * @param query - The search query using Scryfall syntax
@@ -17,8 +57,11 @@ const SCRYFALL_API_BASE_URL = 'https://api.scryfall.com';
  * @returns Promise with search results
  */
 export async function searchCards(query: string, options: SearchOptions = {}): Promise<SearchResult> {
+  // Ensure parentheses are balanced
+  const fixedQuery = ensureBalancedParentheses(query);
+  
   const params = new URLSearchParams({
-    q: query,
+    q: fixedQuery,
     ...options.unique && { unique: options.unique },
     ...options.order && { order: options.order },
     ...options.dir && { dir: options.dir },
