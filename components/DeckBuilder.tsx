@@ -230,7 +230,7 @@ export default function DeckBuilder() {
   return (
     <DndProvider backend={HTML5Backend}>
       <div className="mb-6">
-        <div className="bg-white rounded-lg shadow-md p-4">
+        <div className="card p-4">
           <h2 className="text-xl font-bold mb-4">Quick Add Card</h2>
           <div className="flex flex-col md:flex-row gap-2">
             <div className="flex-grow">
@@ -241,7 +241,7 @@ export default function DeckBuilder() {
             </div>
           </div>
           {quickAddError && (
-            <div className="mt-2 text-red-600 text-sm">
+            <div className="mt-2 text-danger text-sm">
               {quickAddError}
             </div>
           )}
@@ -249,14 +249,14 @@ export default function DeckBuilder() {
       </div>
       
       <div className="mb-6">
-        <div className="border-b border-gray-200">
+        <div className="border-b border-border">
           <nav className="-mb-px flex space-x-8">
             <button
               onClick={() => setActiveTab('builder')}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'builder'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'tab-active'
+                  : 'tab-inactive'
               }`}
             >
               Deck Builder
@@ -265,8 +265,8 @@ export default function DeckBuilder() {
               onClick={() => setActiveTab('evaluation')}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'evaluation'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'tab-active'
+                  : 'tab-inactive'
               }`}
             >
               Deck Evaluation
@@ -275,8 +275,8 @@ export default function DeckBuilder() {
               onClick={() => setActiveTab('ai')}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'ai'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'tab-active'
+                  : 'tab-inactive'
               }`}
             >
               AI Analysis
@@ -285,8 +285,8 @@ export default function DeckBuilder() {
               onClick={() => setActiveTab('purchase')}
               className={`py-4 px-1 border-b-2 font-medium text-sm ${
                 activeTab === 'purchase'
-                  ? 'border-blue-500 text-blue-600'
-                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                  ? 'tab-active'
+                  : 'tab-inactive'
               }`}
             >
               Purchase Deck
@@ -342,10 +342,10 @@ export default function DeckBuilder() {
       )}
       
       {/* Ad Space */}
-      <div className="mt-8 p-4 bg-gray-100 rounded-lg text-center">
-        <p className="text-gray-500 text-sm mb-2">Advertisement</p>
-        <div className="bg-gray-200 h-24 flex items-center justify-center">
-          <p className="text-gray-400">Ad Space - 728x90</p>
+      <div className="mt-8 p-4 bg-secondary-bg rounded-lg text-center">
+        <p className="text-foreground/50 text-sm mb-2">Advertisement</p>
+        <div className="bg-card-bg h-24 flex items-center justify-center border border-border rounded">
+          <p className="text-foreground/30">Ad Space - 728x90</p>
         </div>
       </div>
     </DndProvider>
