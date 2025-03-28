@@ -72,6 +72,6 @@ body {
   }
   
   .tab-inactive {
-    @apply text-foreground border-b-2 border-transparent hover:text-primary hover:border-primary/50 transition-colors;
+    @apply text-foreground border-b-2 border-transparent hover:text-primary hover:border-primary transition-colors;
   }
 }
