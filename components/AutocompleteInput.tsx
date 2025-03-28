@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Card } from '@/lib/api/scryfall';
 import { autocomplete } from '@/lib/api/scryfall';
 
 interface AutocompleteInputProps {
@@ -82,24 +83,24 @@ export default function AutocompleteInput({
         onChange={handleInputChange}
         onFocus={() => setShowSuggestions(true)}
         placeholder={placeholder}
-        className={`w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent ${className}`}
+        className={`input-field ${className}`}
       />
       
       {isLoading && (
         <div className="absolute right-3 top-3">
-          <div className="animate-spin h-5 w-5 border-2 border-blue-500 rounded-full border-t-transparent"></div>
+          <div className="animate-spin h-5 w-5 border-2 border-primary rounded-full border-t-transparent"></div>
         </div>
       )}
       
       {showSuggestions && suggestions.length > 0 && (
         <div 
           ref={suggestionsRef}
-          className="absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg max-h-60 overflow-y-auto"
+          className="absolute z-10 w-full mt-1 bg-card-bg border border-border rounded-lg shadow-lg max-h-60 overflow-y-auto"
         >
           {suggestions.map((suggestion, index) => (
             <div
               key={index}
-              className="p-2 hover:bg-blue-100 cursor-pointer"
+              className="p-2 hover:bg-card-hover cursor-pointer"
               onClick={() => handleSuggestionClick(suggestion)}
             >
               {suggestion}

@@ -1,21 +1,77 @@
+/* Tailwind CSS base styles with new color scheme variables */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
+  /* Option 3: Modern Neutral - Default Light Theme */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #333333;
+  --primary: #0ea5e9;
+  --primary-hover: #0284c7;
+  --secondary-bg: #f3f4f6;
+  --border: #d1d5db;
+  --success: #22c55e;
+  --warning: #eab308;
+  --danger: #ef4444;
+  --card-bg: #ffffff;
+  --card-hover: #e0f2fe;
+  --header-bg: #f8fafc;
+  --sidebar-bg: #f3f4f6;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    /* Option 2: Dark Mode Focus - Dark Theme */
+    --background: #121212;
+    --foreground: #f8f9fa;
+    --primary: #8b5cf6;
+    --primary-hover: #7c3aed;
+    --secondary-bg: #1e1e1e;
+    --border: #333333;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --card-bg: #1e1e1e;
+    --card-hover: #333333;
+    --header-bg: #1a1a1a;
+    --sidebar-bg: #1e1e1e;
   }
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply px-4 py-2 bg-primary text-white rounded-lg hover:bg-primary-hover transition-colors;
+  }
+  
+  .btn-secondary {
+    @apply px-4 py-2 bg-secondary-bg text-foreground border border-border rounded-lg hover:bg-border transition-colors;
+  }
+  
+  .btn-danger {
+    @apply px-4 py-2 bg-danger text-white rounded-lg hover:opacity-90 transition-colors;
+  }
+  
+  .card {
+    @apply bg-card-bg border border-border rounded-lg shadow-sm hover:shadow-md transition-shadow p-4;
+  }
+  
+  .input-field {
+    @apply w-full p-3 bg-card-bg border border-border rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent transition-all;
+  }
+  
+  .tab-active {
+    @apply text-primary border-b-2 border-primary;
+  }
+  
+  .tab-inactive {
+    @apply text-foreground border-b-2 border-transparent hover:text-primary hover:border-primary/50 transition-colors;
+  }
 }

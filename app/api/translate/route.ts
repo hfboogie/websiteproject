@@ -12,9 +12,19 @@ export async function POST(request: Request) {
       );
     }
 
+    // Check if API key is available
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      console.error('OPENAI_API_KEY is missing from environment variables');
+      return NextResponse.json(
+        { error: 'OpenAI API key is not configured' },
+        { status: 500 }
+      );
+    }
+
     // Initialize the OpenAI client with API key from server environment
     const openai = new OpenAI({
-      apiKey: process.env.OPENAI_API_KEY,
+      apiKey: apiKey,
     });
 
     const response = await openai.chat.completions.create({
@@ -58,12 +68,78 @@ Only respond with the Scryfall syntax, nothing else. Make your translations prec
 
     const translatedQuery = response.choices[0].message.content?.trim() || '';
     
+    // Validate that all parentheses are balanced
+    if (!areParenthesesBalanced(translatedQuery)) {
+      const fixedQuery = fixParentheses(translatedQuery);
+      console.log(`Fixed unbalanced parentheses in query: "${translatedQuery}" -> "${fixedQuery}"`);
+      return NextResponse.json({ translatedQuery: fixedQuery });
+    }
+    
     return NextResponse.json({ translatedQuery });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error translating query:', error);
+    const errorMessage = error.message || 'Failed to translate natural language query to Scryfall syntax';
     return NextResponse.json(
-      { error: 'Failed to translate natural language query to Scryfall syntax' },
+      { error: errorMessage },
       { status: 500 }
     );
   }
+}
+
+// Helper function to check if parentheses are balanced
+function areParenthesesBalanced(str: string): boolean {
+  const stack = [];
+  
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === '(') {
+      stack.push('(');
+    } else if (str[i] === ')') {
+      if (stack.length === 0) {
+        return false;
+      }
+      stack.pop();
+    }
+  }
+  
+  return stack.length === 0;
+}
+
+// Helper function to fix unbalanced parentheses
+function fixParentheses(str: string): string {
+  const stack = [];
+  let result = str;
+  
+  // Count opening parentheses
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === '(') {
+      stack.push(i);
+    } else if (str[i] === ')') {
+      if (stack.length > 0) {
+        stack.pop();
+      }
+    }
+  }
+  
+  // Add missing closing parentheses
+  for (let i = 0; i < stack.length; i++) {
+    result += ')';
+  }
+  
+  // Check for extra closing parentheses
+  stack.length = 0;
+  for (let i = 0; i < result.length; i++) {
+    if (result[i] === '(') {
+      stack.push(i);
+    } else if (result[i] === ')') {
+      if (stack.length === 0) {
+        // Remove extra closing parenthesis
+        result = result.substring(0, i) + result.substring(i + 1);
+        i--; // Adjust index after removal
+      } else {
+        stack.pop();
+      }
+    }
+  }
+  
+  return result;
 }
